@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FretNought · Smart Guitar Learning System</title>
+    <title>FretNought Smart Guitar Learning System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -16,14 +16,16 @@
 <body>
 
     <header class="topbar">
-        <div class="topbar__brand">FretNought</div>
+        <div class="topbar__brand">
+            <span class="dot"></span>
+            <span>FretNought</span>
+        </div>
         <nav class="topbar__nav">
             <a href="#overview">Overview</a>
             <a href="#architecture">Architecture</a>
             <a href="#hardware">Hardware</a>
             <a href="#software">Software</a>
             <a href="#gallery">Gallery</a>
-            <a href="#links">Links</a>
         </nav>
     </header>
 
@@ -31,33 +33,32 @@
         <div class="masthead__meta">
             <span>ESE 5160</span>
             <span class="sep">/</span>
-            <span>Internet of Things</span>
-            <span class="sep">/</span>
-            <span>University of Pennsylvania</span>
+            <span>IoT Edge Computing</span>
             <span class="sep">/</span>
             <span>Spring 2026</span>
         </div>
 
-        <h1 class="masthead__title">FretNought</h1>
-        <p class="masthead__subtitle">A wireless smart guitar learning system using sensor fusion to confirm strums and
-            guide chord progressions in real time.</p>
+        <h1 class="masthead__title">
+            <span>Fret</span><span class="masthead__accent">Nought</span>
+        </h1>
 
-        <dl class="masthead__facts">
+        <p class="masthead__lede">
+            A wireless smart guitar that lights up chord shapes on the fretboard and uses dual sensor detection to
+            confirm strums in real time
+        </p>
+
+        <dl class="facts">
             <div>
                 <dt>Team</dt>
                 <dd>Matilda Dingemans, Sophia Fu</dd>
-            </div>
-            <div>
-                <dt>Role</dt>
-                <dd>Hardware design, firmware, backend</dd>
             </div>
             <div>
                 <dt>Stack</dt>
                 <dd>SiWx917, C, Node-RED, MQTT, Azure</dd>
             </div>
             <div>
-                <dt>Status</dt>
-                <dd>Working prototype, demoed Spring 2026</dd>
+                <dt>Built</dt>
+                <dd>Spring 2026, Penn Engineering</dd>
             </div>
         </dl>
     </section>
@@ -67,21 +68,17 @@
             <span class="section__num">01</span>
             <h2 class="section__title">Overview</h2>
         </div>
-        <div class="section__body">
-            <p>
-                FretNought is a smart guitar learning system that places addressable LED strips beneath the strings of
-                an acoustic guitar to display chord shapes directly on the fretboard. A wireless wrist-worn pick
-                contains an IMU that detects strum motion, while a microphone on the fret device captures the resulting
-                audio. Both signals are streamed over Wi-Fi to a Node-RED backend, which fuses the events to confirm a
-                real strum before advancing the chord progression.
-            </p>
-            <p>
-                The system supports two modes. In Practice mode, the user selects chords manually and a confirmed strum
-                advances to the next chord. In Performance mode, chords advance automatically based on a user-defined
-                tempo and capo position, allowing playback of full progressions. The backend also exposes a web
-                dashboard for chord input, mode selection, and live system state.
-            </p>
-        </div>
+        <p>
+            FretNought places addressable LED strips beneath the strings of an acoustic guitar to display chord shapes
+            directly on the fretboard. A wrist-worn smart pick reads strum motion through an IMU, while a microphone on
+            the fret device captures the resulting audio. Both events stream over Wi-Fi to a Node-RED backend, which
+            fuses them inside a 500 ms window before advancing to the next chord.
+        </p>
+        <p>
+            There are two modes. <span class="kw">Practice</span> lets the user step through chords manually, advancing
+            on a confirmed strum. <span class="kw">Performance</span> walks through a progression at user-set tempo and
+            capo for full-song playback. A web dashboard handles chord input, mode selection, and live state.
+        </p>
     </section>
 
     <section id="architecture" class="section">
@@ -89,47 +86,44 @@
             <span class="section__num">02</span>
             <h2 class="section__title">Architecture</h2>
         </div>
-        <div class="section__body">
-            <p>
-                The system consists of three independent components communicating over Wi-Fi and MQTT. Two SiWx917 Wi-Fi
-                MCUs handle the embedded side, one mounted on the fret device and one in the smart pick. Both publish
-                sensor events to an MQTT broker hosted alongside a Node-RED instance on an Azure VM. Node-RED performs
-                the fusion logic, manages chord state, and serves the user-facing web dashboard.
-            </p>
+        <p>
+            Three independent components talk over Wi-Fi and MQTT. Two SiWx917 MCUs handle the embedded side, one in the
+            fret device and one in the pick. Both publish to an MQTT broker hosted with Node-RED on an Azure VM, which
+            runs the fusion logic and serves the dashboard.
+        </p>
 
-            <figure class="diagram">
-                <img src="Images/System_Diagram.png" alt="System block diagram">
-                <figcaption>System block diagram</figcaption>
-            </figure>
+        <figure class="diagram">
+            <img src="Images/System_Diagram.png" alt="System block diagram">
+            <figcaption>System block diagram</figcaption>
+        </figure>
 
-            <div class="components">
-                <div class="component">
-                    <h3>Fret Device</h3>
-                    <ul>
-                        <li>SiWx917 Wi-Fi MCU</li>
-                        <li>Addressable LED strip driven over SPI</li>
-                        <li>I²S microphone for audio detection</li>
-                        <li>OTA firmware update support</li>
-                    </ul>
-                </div>
-                <div class="component">
-                    <h3>Smart Pick</h3>
-                    <ul>
-                        <li>SiWx917 Wi-Fi MCU</li>
-                        <li>IMU read over I²C via QWIIC connector</li>
-                        <li>Wrist-worn enclosure</li>
-                        <li>Publishes strum motion events</li>
-                    </ul>
-                </div>
-                <div class="component">
-                    <h3>Backend</h3>
-                    <ul>
-                        <li>Node-RED on Azure VM</li>
-                        <li>MQTT broker for device telemetry</li>
-                        <li>Sensor fusion with 500 ms window</li>
-                        <li>Web dashboard for control and state</li>
-                    </ul>
-                </div>
+        <div class="components">
+            <div class="component">
+                <h3>Fret Device</h3>
+                <ul>
+                    <li>SiWx917 Wi-Fi MCU</li>
+                    <li>LED strip over SPI</li>
+                    <li>I²S microphone</li>
+                    <li>OTA firmware updates</li>
+                </ul>
+            </div>
+            <div class="component">
+                <h3>Smart Pick</h3>
+                <ul>
+                    <li>SiWx917 Wi-Fi MCU</li>
+                    <li>IMU over I²C / QWIIC</li>
+                    <li>Wrist-worn enclosure</li>
+                    <li>Strum event publisher</li>
+                </ul>
+            </div>
+            <div class="component">
+                <h3>Backend</h3>
+                <ul>
+                    <li>Node-RED on Azure VM</li>
+                    <li>MQTT broker</li>
+                    <li>500 ms fusion window</li>
+                    <li>Web dashboard</li>
+                </ul>
             </div>
         </div>
     </section>
@@ -139,22 +133,19 @@
             <span class="section__num">03</span>
             <h2 class="section__title">Hardware</h2>
         </div>
-        <div class="section__body">
-            <p>
-                The fret device PCB was designed in Altium around the SiWx917 module, with attention given to power
-                distribution, decoupling, and impedance-controlled routing for the Wi-Fi traces. The board integrates a
-                microphone for audio detection, headers for the LED strip's SPI interface, and a QWIIC connector for I²C
-                peripherals. Power delivery worked reliably across the full build with no observed brownouts or rail
-                issues.
-            </p>
-            <p>
-                During bring-up, the custom board exhibited a persistent <code>Timeout 102</code> error during SWD
-                programming that could not be resolved through jumper, pull-up, or POC reconfiguration. To preserve
-                schedule, firmware was migrated to the SiWx917 development boards while the standalone PCB remained as a
-                hardware deliverable. The microphone footprint was identified as a layout error during this process and
-                is documented as a fix for any future revision.
-            </p>
-        </div>
+        <p>
+            The fret device PCB was designed in Altium around the SiWx917 module, including power distribution,
+            decoupling, and radio circuitry. It integrates a microphone for audio detection and an SPI-based LED strip.
+
+            The pick device is a smaller wrist-worn board built around its own SiWx917 module, with an onboard IMU for
+            detecting strum motion. After the move to dev boards, the IMU was broken out from the custom pick PCB and
+            connected to the dev board over I²C through an on board QWIIC connector.
+        </p>
+        <p>
+            Bring-up surfaced a persistent <code>Timeout 102</code> over SWD on the custom board that resisted every fix
+            tried. To stay on schedule, firmware was migrated to SiWx917 dev boards while the standalone PCB remained as
+            a hardware deliverable.
+        </p>
     </section>
 
     <section id="software" class="section">
@@ -162,24 +153,18 @@
             <span class="section__num">04</span>
             <h2 class="section__title">Software</h2>
         </div>
-        <div class="section__body">
-            <p>
-                Three peripheral drivers were written for the SiWx917. The I²S driver configures the peripheral in
-                receive mode at the microphone's word size and sample rate, with DMA-backed buffers feeding a frequency
-                analysis routine that detects the presence of guitar audio. The I²C driver implements register-level
-                read and write transactions for IMU initialization and polled accelerometer reads. The LED strip is
-                driven over SPI by encoding the protocol's pulse timing directly into the MOSI bit pattern, eliminating
-                the need for bit-banged GPIO timing.
-            </p>
-            <p>
-                The Node-RED backend subscribes to MQTT topics from both devices and applies a 500 ms correlation
-                window: a chord advances only when an IMU strum event and a mic audio event arrive within that window,
-                filtering out incidental motion and ambient noise. The dashboard exposes chord selection, mode toggling,
-                tempo, and capo controls, and reflects the current chord state back to the fret device for LED
-                rendering. The fret device firmware also supports OTA updates, with images hosted on the same Azure VM
-                as the backend.
-            </p>
-        </div>
+        <p>
+            Three peripheral drivers were written from scratch on the SiWx917. The <span class="kw">I²S</span> driver
+            streams mic audio into DMA buffers for frequency analysis. The <span class="kw">I²C</span> driver handles
+            register-level reads from the IMU. The <span class="kw">SPI</span> driver encodes the LED strip protocol's
+            pulse timing directly into the MOSI bit pattern, avoiding bit-banged GPIO.
+        </p>
+        <p>
+            The Node-RED backend correlates IMU strum events with mic audio events inside a 500 ms window, filtering out
+            incidental motion and ambient noise before advancing the chord. The dashboard exposes chord, mode, tempo,
+            and capo controls and reflects current state back to the fret device. OTA images are hosted on the same
+            Azure VM.
+        </p>
     </section>
 
     <section id="gallery" class="section">
@@ -187,100 +172,155 @@
             <span class="section__num">05</span>
             <h2 class="section__title">Gallery</h2>
         </div>
-        <div class="section__body">
 
-            <div class="gallery-group">
-                <h3 class="gallery-group__heading">Build</h3>
-                <div class="gallery">
-                    <figure class="g"><img src="Images/Img2.jpeg" alt="FretNought build"></figure>
-                    <figure class="g"><img src="Images/im4.png" alt="FretNought build detail"></figure>
-                    <figure class="g"><img src="Images/Img1.jpeg" alt="FretNought in use"></figure>
-                    <figure class="g"><img src="Images/img3.jpeg" alt="FretNought build detail"></figure>
-                </div>
+        <div class="gallery-group">
+            <h3 class="gallery-group__heading">Build</h3>
+            <div class="gallery">
+                <figure class="g"><img src="Images/Img2.jpeg" alt="FretNought build"></figure>
+                <figure class="g"><img src="Images/im4.png" alt="FretNought build detail"></figure>
+                <figure class="g"><img src="Images/Img1.jpeg" alt="FretNought in use"></figure>
+                <figure class="g"><img src="Images/img3.jpeg" alt="FretNought build detail"></figure>
             </div>
+        </div>
 
-            <div class="gallery-group">
-                <h3 class="gallery-group__heading">Hardware</h3>
-                <div class="gallery">
-                    <figure class="g"><img src="Images/standalone_top.png" alt="PCBA top">
-                        <figcaption>PCBA, top</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/standalone_bottom.png" alt="PCBA bottom">
-                        <figcaption>PCBA, bottom</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/altium1.png" alt="Altium 2D">
-                        <figcaption>Altium, 2D</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/altium2.png" alt="Altium 3D">
-                        <figcaption>Altium, 3D</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/thermal.png" alt="Thermal image">
-                        <figcaption>Thermal, power on</figcaption>
-                    </figure>
-                </div>
+        <div class="gallery-group">
+            <h3 class="gallery-group__heading">Hardware</h3>
+            <div class="gallery">
+                <figure class="g"><img src="Images/standalone_top.png" alt="PCBA top">
+                    <figcaption>PCBA, top</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/standalone_bottom.png" alt="PCBA bottom">
+                    <figcaption>PCBA, bottom</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/altium1.png" alt="Altium 2D">
+                    <figcaption>Altium, 2D</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/altium2.png" alt="Altium 3D">
+                    <figcaption>Altium, 3D</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/thermal.png" alt="Thermal image">
+                    <figcaption>Thermal, power on</figcaption>
+                </figure>
             </div>
+        </div>
 
-            <div class="gallery-group">
-                <h3 class="gallery-group__heading">Backend</h3>
-                <div class="gallery">
-                    <figure class="g"><img src="Images/nodered1.png" alt="Dashboard practice mode">
-                        <figcaption>Dashboard, Practice</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/nodered2.png" alt="Dashboard performance mode">
-                        <figcaption>Dashboard, Performance</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/nodered3.png" alt="Dev dashboard">
-                        <figcaption>Dashboard, Dev</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/nodered4.png" alt="Node-RED flow">
-                        <figcaption>Node-RED flow</figcaption>
-                    </figure>
-                    <figure class="g"><img src="Images/nodered5.png" alt="Node-RED flow detail">
-                        <figcaption>Node-RED flow detail</figcaption>
-                    </figure>
-                </div>
+        <div class="gallery-group">
+            <h3 class="gallery-group__heading">Backend</h3>
+            <div class="gallery">
+                <figure class="g"><img src="Images/nodered1.png" alt="Dashboard practice">
+                    <figcaption>Dashboard, Practice</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/nodered2.png" alt="Dashboard performance">
+                    <figcaption>Dashboard, Performance</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/nodered3.png" alt="Dev dashboard">
+                    <figcaption>Dashboard, Dev</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/nodered4.png" alt="Node-RED flow">
+                    <figcaption>Node-RED flow</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/nodered5.png" alt="Node-RED flow detail">
+                    <figcaption>Node-RED flow detail</figcaption>
+                </figure>
             </div>
-
         </div>
     </section>
 
-    <section id="links" class="section">
+    <section class="section section--links">
         <div class="section__head">
             <span class="section__num">06</span>
             <h2 class="section__title">Links</h2>
         </div>
-        <div class="section__body">
-            <ul class="link-list">
-                <li>
-                    <span class="link-list__label">Firmware</span>
-                    <a href="https://github.com/ese5160/final-project-firmware-s26-t10-guitar-heroes" target="_blank"
-                        rel="noopener">github.com/ese5160/final-project-firmware-s26-t10-guitar-heroes</a>
-                </li>
-                <li>
-                    <span class="link-list__label">Submission</span>
-                    <a href="https://github.com/ese5160/a11g-final-submission-s26-s26-t10-guitar-heroes" target="_blank"
-                        rel="noopener">github.com/ese5160/a11g-final-submission-s26-s26-t10-guitar-heroes</a>
-                </li>
-                <li>
-                    <span class="link-list__label">Hardware</span>
-                    <a href="https://upenn-eselabs.365.altium.com/designs/folder-03D3DC70-FAF4-4D07-AA52-7B80FEADE16D"
-                        target="_blank" rel="noopener">Altium Project</a>
-                </li>
-                <li>
-                    <span class="link-list__label">Live</span>
-                    <a href="http://20.7.145.116:1880/dashboard" target="_blank" rel="noopener">Node-RED Dashboard</a>
-                </li>
-            </ul>
-        </div>
+        <ul class="link-list">
+            <li>
+                <span class="link-list__label">Firmware</span>
+                <a href="https://github.com/ese5160/final-project-firmware-s26-t10-guitar-heroes" target="_blank"
+                    rel="noopener">GitHub repository</a>
+            </li>
+            <li>
+                <span class="link-list__label">Submission</span>
+                <a href="https://github.com/ese5160/a11g-final-submission-s26-s26-t10-guitar-heroes" target="_blank"
+                    rel="noopener">Final submission repo</a>
+            </li>
+            <li>
+                <span class="link-list__label">Hardware</span>
+                <a href="https://upenn-eselabs.365.altium.com/designs/folder-03D3DC70-FAF4-4D07-AA52-7B80FEADE16D"
+                    target="_blank" rel="noopener">Altium project</a>
+            </li>
+            <li>
+                <span class="link-list__label">Live</span>
+                <a href="http://20.7.145.116:1880/dashboard" target="_blank" rel="noopener">Node-RED dashboard</a>
+            </li>
+        </ul>
     </section>
 
     <footer class="footer">
-        <div class="footer__row">
-            <span>FretNought · 2026</span>
-            <span>Matilda Dingemans · Sophia Fu</span>
-            <span>ESE 5160 · University of Pennsylvania</span>
-        </div>
+        <span>FretNought, 2026</span>
+        <span>Matilda Dingemans &nbsp;·&nbsp; Sophia Fu</span>
+        <span>ESE 5160 / Penn</span>
     </footer>
+
+
+    <div class="lightbox" id="imageLightbox" aria-hidden="true" role="dialog" aria-label="Expanded gallery image">
+        <button class="lightbox__close" type="button" aria-label="Close expanded image">&times;</button>
+        <img class="lightbox__image" id="lightboxImage" src="" alt="">
+        <p class="lightbox__caption" id="lightboxCaption"></p>
+    </div>
+
+    <script>
+        const lightbox = document.getElementById('imageLightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+        const lightboxCaption = document.getElementById('lightboxCaption');
+        const closeLightboxButton = document.querySelector('.lightbox__close');
+
+        function openLightbox(figure) {
+            const image = figure.querySelector('img');
+            const caption = figure.querySelector('figcaption');
+
+            lightboxImage.src = image.src;
+            lightboxImage.alt = image.alt || 'Expanded gallery image';
+            lightboxCaption.textContent = caption ? caption.textContent : image.alt;
+
+            lightbox.classList.add('is-open');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('lightbox-open');
+            closeLightboxButton.focus();
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('is-open');
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('lightbox-open');
+            lightboxImage.src = '';
+        }
+
+        document.querySelectorAll('.gallery .g').forEach((figure) => {
+            figure.setAttribute('role', 'button');
+            figure.setAttribute('tabindex', '0');
+
+            figure.addEventListener('click', () => openLightbox(figure));
+            figure.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openLightbox(figure);
+                }
+            });
+        });
+
+        lightbox.addEventListener('click', (event) => {
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        closeLightboxButton.addEventListener('click', closeLightbox);
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && lightbox.classList.contains('is-open')) {
+                closeLightbox();
+            }
+        });
+    </script>
 
 </body>
 

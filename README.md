@@ -6,6 +6,8 @@
 
 **GitHub Repository URL:** https://github.com/ese5160/a11g-final-submission-s26-s26-t10-guitar-heroes
 
+**Website URL:** https://ese5160.github.io/a11g-final-submission-s26-s26-t10-guitar-heroes/
+
 | Team Member Name  | Email Address | GitHub Handle |
 | ----------------- | ------------- | ------------- |
 | Matilda Dingemans | mdingema@seas | MatildaZD     |
@@ -42,7 +44,7 @@ The mobile web page communicates with both devices and offers two modes:
 
 The biggest hardware roadblock was a persistent Timeout 102 error when trying to flash our custom PCB. We tried nearly every fix we could find but the error kept coming back, and we were ultimately forced to migrate our firmware over to the SiWx917 dev boards in order to flash and run our code on schedule.
 
-Once we were unblocked on flashing, the next set of challenges was writing the low-level drivers needed for our peripherals. For the microphone (I2S), we got it working by configuring the SiWx917's I2S peripheral in receive mode with the correct word size and sample rate to match the mic, then DMA'ing samples into a buffer for frequency analysis. For the IMU (I2C), we wrote a driver that handled the standard register read/write transactions over the I2C bus, including initialization of the sensor's control registers and polling-based reads of the accelerometer data. For the LED strip, we drove the addressable LEDs over SPI by carefully crafting the MOSI bit pattern and clock rate so that each SPI byte encoded the precise high/low pulse timing the LED protocol expects, letting us push full-strip color data. We were running into a problem where we could not turn the LEDs fully off, but eventually traced this to the fact that our LED update code was running inside a thread that didn't have the privileges needed to fully control the SPI peripheral's output state, so the line wasn't being driven cleanly to idle between transfers.
+Once we were unblocked on flashing, the next set of challenges was writing the low-level drivers needed for our peripherals. For the microphone (I2S), we got it working by configuring the SiWx917's I2S peripheral in receive mode with the correct word size and sample rate to match the mic, then DMA'ing samples into a buffer for frequency analysis. For the IMU (I2C), we wrote a driver that handled the standard register read/write transactions over the I2C bus, including initialization of the sensor's control registers and polling-based reads of the accelerometer data. For the LED strip, we drove the addressable LEDs over SPI by carefully crafting the MOSI bit pattern and clock rate so that each SPI byte encoded the precise high/low pulse timing the LED protocol expects, letting us push full-strip color data. We were running into a problem where we could not turn the LEDs fully off, but eventually traced this to the fact that our LED update code was running inside a thread that wasn't using DMA which was needed to fully control the SPI peripheral's output properly, so the line wasn't being driven cleanly to idle between transfers.
 
 Our last challenge was that the metal strings kept shorting our device as the LEDs have exposed pads. We fixed this with tape and heat sink.
 
