@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FretNought — A Smart Guitar Learning System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;0,6..96,900;1,6..96,400&family=JetBrains+Mono:wght@400;500;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;1,9..144,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Grain overlay -->
+    <div class="grain"></div>
+
+    <!-- Top nav -->
+    <header class="topbar">
+        <div class="topbar__brand">
+            <span class="topbar__mark">◐</span>
+            <span class="topbar__name">FretNought</span>
+        </div>
+        <nav class="topbar__nav">
+            <a href="#overview">Overview</a>
+            <a href="#system">System</a>
+            <a href="#challenges">Challenges</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#links">Links</a>
+        </nav>
+        <div class="topbar__meta">ESE 5160 · Team 10</div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero__label">
+            <span>Internet of Things</span>
+            <span class="hero__dot">·</span>
+            <span>University of Pennsylvania</span>
+            <span class="hero__dot">·</span>
+            <span>Spring 2026</span>
+        </div>
+
+        <h1 class="hero__title">
+            <span class="hero__line hero__line--1">Fret</span><span class="hero__line hero__line--2">Nought</span>
+        </h1>
+
+        <p class="hero__tagline">
+            A smart guitar that <em>shows</em> you how to play —<br>
+            LEDs under the strings, an IMU in the pick, and a backend that listens for the strum.
+        </p>
+
+        <div class="hero__strings" aria-hidden="true">
+            <div class="string"><span class="led led--lit"></span><span class="led"></span><span
+                    class="led led--lit"></span><span class="led"></span><span class="led"></span></div>
+            <div class="string"><span class="led"></span><span class="led led--lit"></span><span
+                    class="led"></span><span class="led"></span><span class="led"></span></div>
+            <div class="string"><span class="led led--lit"></span><span class="led"></span><span
+                    class="led"></span><span class="led"></span><span class="led"></span></div>
+            <div class="string"><span class="led"></span><span class="led"></span><span
+                    class="led led--lit"></span><span class="led"></span><span class="led"></span></div>
+            <div class="string"><span class="led"></span><span class="led led--lit"></span><span
+                    class="led"></span><span class="led"></span><span class="led"></span></div>
+            <div class="string"><span class="led"></span><span class="led"></span><span class="led"></span><span
+                    class="led led--lit"></span><span class="led"></span></div>
+        </div>
+    </section>
+
+    <!-- Overview -->
+    <section id="overview" class="block block--overview">
+        <div class="block__head">
+            <span class="block__num">01</span>
+            <h2 class="block__title">The Project</h2>
+        </div>
+
+        <div class="overview__grid">
+            <div class="overview__lede">
+                <p>
+                    FretNought is a smart guitar learning system that places addressable LED strips beneath the strings
+                    and lights up the exact frets a beginner needs to press for any chord. A wireless smart pick — worn
+                    like a wristband — detects strumming through an onboard IMU, while a microphone on the fret device
+                    listens for the guitar itself.
+                </p>
+                <p>
+                    The two streams meet in a Node-RED backend, which only advances to the next chord when motion
+                    <em>and</em> sound arrive within a 500&nbsp;ms window. Beginners stop translating chord charts in
+                    their head and just play.
+                </p>
+            </div>
+
+            <aside class="overview__stats">
+                <div class="stat">
+                    <div class="stat__num">2</div>
+                    <div class="stat__label">Wi-Fi devices</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__num">3</div>
+                    <div class="stat__label">Peripheral drivers (I²C, I²S, SPI)</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__num">500<span>ms</span></div>
+                    <div class="stat__label">Sensor-fusion window</div>
+                </div>
+                <div class="stat">
+                    <div class="stat__num">2</div>
+                    <div class="stat__label">Modes — Practice & Performance</div>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- Modes -->
+    <section class="block block--modes">
+        <div class="block__head">
+            <span class="block__num">02</span>
+            <h2 class="block__title">Two Modes</h2>
+        </div>
+
+        <div class="modes">
+            <article class="mode">
+                <div class="mode__tag">Practice</div>
+                <h3>Learn it slow.</h3>
+                <p>Pick a chord. The fretboard lights up. Strum once — confirmed by the pick's IMU and the mic together
+                    — and the next chord lights up. No metronome, no pressure.</p>
+            </article>
+            <article class="mode mode--alt">
+                <div class="mode__tag">Performance</div>
+                <h3>Play the song.</h3>
+                <p>Set tempo, capo, and a chord progression. FretNought walks the fretboard through the song in time, so
+                    you can play full pieces without ever looking at a chart.</p>
+            </article>
+        </div>
+    </section>
+
+    <!-- System architecture -->
+    <section id="system" class="block block--system">
+        <div class="block__head">
+            <span class="block__num">03</span>
+            <h2 class="block__title">System Architecture</h2>
+        </div>
+
+        <p class="block__intro">
+            Two SiWx917 modules — one in the fretboard, one in the pick — talk to a Node-RED backend hosted on Azure.
+            The backend fuses sensor events, drives the dashboard, and streams chord state back to the fretboard.
+        </p>
+
+        <figure class="system-diagram">
+            <img src="Images/System_Diagram.png"
+                alt="System block diagram showing fret device, pick device, Node-RED backend, and web dashboard">
+            <figcaption>System-level block diagram</figcaption>
+        </figure>
+
+        <div class="components">
+            <div class="component">
+                <div class="component__label">Fret Device</div>
+                <ul>
+                    <li>SiWx917 Wi-Fi MCU</li>
+                    <li>Addressable LED strips (SPI)</li>
+                    <li>I²S microphone for audio detect</li>
+                    <li>OTA firmware updates</li>
+                </ul>
+            </div>
+            <div class="component">
+                <div class="component__label">Smart Pick</div>
+                <ul>
+                    <li>SiWx917 Wi-Fi MCU</li>
+                    <li>IMU over I²C (QWIIC)</li>
+                    <li>Wrist-worn enclosure</li>
+                    <li>Strum-event publisher</li>
+                </ul>
+            </div>
+            <div class="component">
+                <div class="component__label">Backend</div>
+                <ul>
+                    <li>Node-RED on Azure VM</li>
+                    <li>MQTT message bus</li>
+                    <li>Sensor fusion (500&nbsp;ms window)</li>
+                    <li>Web dashboard UI</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Challenges -->
+    <section id="challenges" class="block block--challenges">
+        <div class="block__head">
+            <span class="block__num">04</span>
+            <h2 class="block__title">Challenges</h2>
+        </div>
+
+        <div class="challenges">
+
+            <article class="challenge">
+                <div class="challenge__num">a.</div>
+                <div class="challenge__body">
+                    <h3>Timeout 102</h3>
+                    <p>The custom SiWx917 PCB refused to flash over SWD, throwing a persistent <code>Timeout 102</code>
+                        error. We exhausted the obvious fixes — jumper rework, POC reconfiguration, GPIO pull-up audits,
+                        probe swaps — and ultimately migrated firmware to dev boards to ship the project on schedule.
+                    </p>
+                </div>
+            </article>
+
+            <article class="challenge">
+                <div class="challenge__num">b.</div>
+                <div class="challenge__body">
+                    <h3>Three drivers, three buses</h3>
+                    <p>With the dev boards in hand, three peripherals needed bring-up. The <strong>I²S mic</strong> came
+                        up by configuring receive mode at the right word size and DMA'ing samples for frequency
+                        analysis. The <strong>I²C IMU</strong> needed a register-level driver for control setup and
+                        polled accelerometer reads. The <strong>SPI LED strip</strong> was driven by hand-crafting MOSI
+                        bit patterns at a clock rate that encoded the LED protocol's exact pulse timing.</p>
+                </div>
+            </article>
+
+            <article class="challenge">
+                <div class="challenge__num">c.</div>
+                <div class="challenge__body">
+                    <h3>The LEDs that wouldn't go dark</h3>
+                    <p>Even with the LED driver working, the strip never fully turned off — a faint glow persisted.
+                        Tracing the issue revealed our update code was running in a thread without the privileges to
+                        fully control the SPI peripheral's idle state. Granting the right privileges drove the line
+                        clean and let us turn the strip truly black.</p>
+                </div>
+            </article>
+
+            <article class="challenge">
+                <div class="challenge__num">d.</div>
+                <div class="challenge__body">
+                    <h3>Steel strings, exposed pads</h3>
+                    <p>Mounted under the strings, the LED strip's exposed pads kept shorting against the steel strings
+                        during play. Tape and a heat-sink layer fixed it for the demo — a permanent fix would mean a
+                        properly insulated LED housing in the next revision.</p>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="block block--gallery">
+        <div class="block__head">
+            <span class="block__num">05</span>
+            <h2 class="block__title">Gallery</h2>
+        </div>
+
+        <div class="gallery-section">
+            <h3 class="gallery__heading">The Build</h3>
+            <div class="gallery gallery--build">
+                <figure class="g g--big"><img src="Images/Img2.jpeg" alt="FretNought final build"></figure>
+                <figure class="g"><img src="Images/im4.png" alt="FretNought build detail"></figure>
+                <figure class="g"><img src="Images/Img1.jpeg" alt="FretNought in use"></figure>
+                <figure class="g"><img src="Images/img3.jpeg" alt="FretNought build detail"></figure>
+            </div>
+        </div>
+
+        <div class="gallery-section">
+            <h3 class="gallery__heading">Hardware</h3>
+            <div class="gallery gallery--pcb">
+                <figure class="g"><img src="Images/standalone_top.png" alt="PCBA top view">
+                    <figcaption>PCBA · Top</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/standalone_bottom.png" alt="PCBA bottom view">
+                    <figcaption>PCBA · Bottom</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/altium1.png" alt="Altium 2D board">
+                    <figcaption>Altium · 2D</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/altium2.png" alt="Altium 3D board">
+                    <figcaption>Altium · 3D</figcaption>
+                </figure>
+                <figure class="g g--wide"><img src="Images/thermal.png" alt="Thermal camera image of board powered on">
+                    <figcaption>Thermal · power-on</figcaption>
+                </figure>
+            </div>
+        </div>
+
+        <div class="gallery-section">
+            <h3 class="gallery__heading">Backend</h3>
+            <div class="gallery gallery--backend">
+                <figure class="g"><img src="Images/nodered1.png" alt="Node-RED dashboard practice mode">
+                    <figcaption>Dashboard · Practice</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/nodered2.png" alt="Node-RED dashboard performance mode">
+                    <figcaption>Dashboard · Performance</figcaption>
+                </figure>
+                <figure class="g"><img src="Images/nodered3.png" alt="Node-RED dev dashboard">
+                    <figcaption>Dashboard · Dev</figcaption>
+                </figure>
+                <figure class="g g--wide"><img src="Images/nodered4.png" alt="Node-RED backend flow">
+                    <figcaption>Node-RED · Backend flow</figcaption>
+                </figure>
+                <figure class="g g--wide"><img src="Images/nodered5.png" alt="Node-RED backend flow detail">
+                    <figcaption>Node-RED · Backend detail</figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Links -->
+    <section id="links" class="block block--links">
+        <div class="block__head">
+            <span class="block__num">06</span>
+            <h2 class="block__title">Project Links</h2>
+        </div>
+
+        <div class="links">
+            <a class="link-card" href="https://github.com/ese5160/final-project-firmware-s26-t10-guitar-heroes"
+                target="_blank" rel="noopener">
+                <div class="link-card__label">Firmware</div>
+                <div class="link-card__name">GitHub Repository</div>
+                <div class="link-card__arrow">→</div>
+            </a>
+            <a class="link-card" href="http://20.7.145.116:1880/dashboard" target="_blank" rel="noopener">
+                <div class="link-card__label">Live</div>
+                <div class="link-card__name">Node-RED Dashboard</div>
+                <div class="link-card__arrow">→</div>
+            </a>
+            <a class="link-card"
+                href="https://upenn-eselabs.365.altium.com/designs/folder-03D3DC70-FAF4-4D07-AA52-7B80FEADE16D"
+                target="_blank" rel="noopener">
+                <div class="link-card__label">Hardware</div>
+                <div class="link-card__name">Altium Project</div>
+                <div class="link-card__arrow">→</div>
+            </a>
+            <a class="link-card" href="https://github.com/ese5160/a11g-final-submission-s26-s26-t10-guitar-heroes"
+                target="_blank" rel="noopener">
+                <div class="link-card__label">Submission</div>
+                <div class="link-card__name">Final Submission Repo</div>
+                <div class="link-card__arrow">→</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__cols">
+            <div class="footer__col">
+                <div class="footer__label">Project</div>
+                <div class="footer__big">FretNought</div>
+            </div>
+            <div class="footer__col">
+                <div class="footer__label">Team — Guitar Heroes</div>
+                <ul>
+                    <li>Matilda Dingemans · <a href="https://github.com/MatildaZD">@MatildaZD</a></li>
+                    <li>Sophia Fu · <a href="https://github.com/sophfu">@sophfu</a></li>
+                </ul>
+            </div>
+            <div class="footer__col">
+                <div class="footer__label">Course</div>
+                <ul>
+                    <li>ESE 5160 — IoT</li>
+                    <li>University of Pennsylvania</li>
+                    <li>Spring 2026</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer__rule"></div>
+        <div class="footer__bottom">
+            <span>◐ FretNought · 2026</span>
+            <span>Made with solder, code & a guitar.</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>
