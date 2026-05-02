@@ -563,3 +563,61 @@ body.lightbox-open {
 .lightbox__caption:empty {
     display: none;
 }
+
+/* ============== Video CTA ============== */
+.video-cta {
+    border-top: 1px solid var(--rule);
+}
+
+.video-cta__inner {
+    padding: 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--rule);
+    border-radius: 18px;
+    text-align: center;
+}
+
+.video-cta__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+}
+
+.video-cta__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+    color: var(--ink);
+}
+
+.video-cta__text {
+    max-width: 55ch;
+    margin: 0 auto 1.5rem;
+    color: var(--ink-soft);
+}
+
+.video-cta__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.85rem 1.2rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.video-cta__button:hover {
+    transform: translateY(-2px);
+    opacity: 0.88;
+}
